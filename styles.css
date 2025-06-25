@@ -1,0 +1,28 @@
+body {
+      margin: 0;
+      background-color: #303030;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .audio-container {
+      background-color: #2a2a2a;
+      padding: 20px 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 186, 120, 0.3);
+    }
+
+    audio {
+      width: 300px;
+      accent-color: #00ba78; /* Для современных браузеров */
+    }
+
+    h1 {
+      color: #00ba78;
+      text-align: center;
+      margin-bottom: 15px;
+    }
