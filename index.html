@@ -3,223 +3,122 @@
 <head>
   <meta charset="UTF-8">
   <title>LoLz.Live идеяы</title>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="Lolzlive">
+    <span class="capt">Lolz Live Audio Files Thread</span>
+  </div>
+  <div class="pla1">
+    <div class="player">
+      <audio id="audio" src="osama x che unrelease.mp3" preload="auto"></audio>
 
-    body {
-      margin: 0;
-      background-color: #303030;
-      color: #fff;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
+      <div class="controls">
+        <button class="play-btn" id="playPauseBtn">▶</button>
 
-    .player {
-      background-color: #262626;
-      padding: 22px;
-      border-radius: 20px;
-      width: 400px;
-      display: flex;
-      flex-direction: column;
-      
-    }
+        <div class="progress-container" id="progressContainer">
+          <div class="progress" id="progress"></div>
+        </div>
 
-    .controls {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+        <div class="time" id="duration">0:00</div>
+      </div>
+    </div>
 
-    .play-btn {
-      background-color: #00ba78;
-      border: none;
-      color: #444;
-      padding: 12px 16px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 18px;
-      transition: background-color 0.3s ease;
-    }
+    <div class="volume-container">
+      <input type="range" min="0" max="1" step="0.01" value="1" id="volumeSlider" class="volume-slider">
+    </div>
+  </div>
+  <div class="rasez">
+    <span class="creator">Creator And Designer:</span>
+    <span class="me"><a class="me "href="https://lolz.live/rrsz/">rasez</a></span>
+  </div>
+  <a href="https://lolz.live/threads/8864532/" class="tema">ТЕМА НА ЛОЛЗЕ</a>
+  <script>
+    const audio = document.getElementById('audio');
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const progress = document.getElementById('progress');
+    const progressContainer = document.getElementById('progressContainer');
+    const durationText = document.getElementById('duration');
+    const volumeSlider = document.getElementById('volumeSlider');
 
-    .play-btn:hover {
-      background-color: #029b63;
-    }
+    let isPlaying = false;
 
-    .progress-container {
-      flex: 1;
-      height: 10px;
-      background-color: #444;
-      border-radius: 5px;
-      cursor: pointer;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .progress {
-      height: 100%;
-      background-color: #00ba78;
-      width: 0%;
-      border-radius: 5px;
-      transition: width 0.14s linear;
-    }
-
-    .time {
-      font-size: 15px;
-      min-width: 50px;
-      text-align: right;
-      color: #d6d5d5;
-    }
-
-    .volume-container {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .volume-slider {
-      width: 100px;
-      accent-color: #00ba78;
+    
+    const savedVolume = localStorage.getItem('volume');
+    if (savedVolume !== null) {
+      audio.volume = parseFloat(savedVolume);
+      volumeSlider.value = savedVolume;
     }
 
    
-    .pla1 {
-        display: flex;
-         background-color: #262626;
-         border-radius: 20px;
-         padding-right: 15px;
-    }
-    .volume-slider {
-  width: 100px;
-  -webkit-appearance: none; 
-  background: transparent;
-  cursor: pointer;
-}
+    const updateButton = () => {
+      playPauseBtn.innerHTML = isPlaying
+        ? `<svg width="27" height="27" fill="#262626" viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>`
+        : `<svg width="27" height="27" fill="#262626" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>`;
+    };
+
+    playPauseBtn.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play();
+        isPlaying = true;
+      } else {
+        audio.pause();
+        isPlaying = false;
+      }
+      updateButton();
+    });
+
+   
+    audio.addEventListener('timeupdate', () => {
+      const percent = (audio.currentTime / audio.duration) * 100;
+      progress.style.width = percent + '%';
+
+      const minutes = Math.floor(audio.currentTime / 60);
+      const seconds = Math.floor(audio.currentTime % 60).toString().padStart(2, '0');
+      durationText.textContent = `${minutes}:${seconds}`;
+    });
+
+    
+    progressContainer.addEventListener('click', (e) => {
+      const width = progressContainer.clientWidth;
+      const clickX = e.offsetX;
+      const duration = audio.duration;
+      audio.currentTime = (clickX / width) * duration;
+    });
+
+    
+    volumeSlider.addEventListener('input', () => {
+      const volume = parseFloat(volumeSlider.value);
+      audio.volume = volume;
+      localStorage.setItem('volume', volume);
+    });
+  
+audio.addEventListener('play', () => localStorage.setItem('isPlaying', 'true'));
+audio.addEventListener('pause', () => localStorage.setItem('isPlaying', 'false'));
 
 
-.volume-slider::-webkit-slider-runnable-track {
-  height: 6px;
-  background: #444;
-  border-radius: 3px;
-}
-
-.volume-slider::-moz-range-track {
-  height: 6px;
-  background: #444;
-  border-radius: 3px;
-}
-
-
-
-.volume-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 20px;
-  height: 20px;
-  background: #00ba78; 
-  border-radius: 50%;
-  border: none;
-  margin-top: -7px; 
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.volume-slider::-webkit-slider-thumb:hover {
-  background: #029b63;
-}
-
-.volume-slider::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  background: #00ba78;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.volume-slider::-moz-range-thumb:hover {
-  background: #029b63;
-}
-
-  </style>
-</head>
-<body>
-  <div class="pla1">
-  <div class="player">
-    <audio id="audio" src="osama x che unrelease.mp3"></audio>
-
-    <div class="controls">
-      <button class="play-btn" id="playPauseBtn">▶</button>
-
-      <div class="progress-container" id="progressContainer">
-        <div class="progress" id="progress"></div>
-      </div>
-
-      <div class="time" id="duration">0:00</div>
-    </div>
-  </div>
-<div class="volume-container">
-      <input type="range" min="0" max="1" step="0.01" value="1" id="volumeSlider" class="volume-slider">
-    </div>
-    </div>  
-  <script>
-  const audio = document.getElementById('audio');
-  const playPauseBtn = document.getElementById('playPauseBtn');
-  const progress = document.getElementById('progress');
-  const progressContainer = document.getElementById('progressContainer');
-  const durationText = document.getElementById('duration');
-  const volumeSlider = document.getElementById('volumeSlider');
-
-  let isPlaying = false;
-
-  const updateButton = () => {
-    playPauseBtn.innerHTML = isPlaying
-      ? `<svg width="27" height="27" fill="#262626" viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>` // pause
-      : `<svg width="27" height="27" fill="#262626" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>`; // play
-  };
-
-  playPauseBtn.addEventListener('click', () => {
-    if (audio.paused) {
-      audio.play();
-      isPlaying = true;
-    } else {
-      audio.pause();
-      isPlaying = false;
-    }
+window.addEventListener('load', () => {
+  if (localStorage.getItem('isPlaying') === 'true') {
+    audio.play().catch(() => {});
+    isPlaying = true;
     updateButton();
-  });
+  }
+});
 
-  audio.addEventListener('timeupdate', () => {
-    const percent = (audio.currentTime / audio.duration) * 100;
-    progress.style.width = percent + '%';
-
-    const minutes = Math.floor(audio.currentTime / 60);
-    const seconds = Math.floor(audio.currentTime % 60).toString().padStart(2, '0');
-    durationText.textContent = `${minutes}:${seconds}`;
-  });
-
-  progressContainer.addEventListener('click', (e) => {
-    const width = progressContainer.clientWidth;
-    const clickX = e.offsetX;
-    const duration = audio.duration;
-    audio.currentTime = (clickX / width) * duration;
-  });
-
-  volumeSlider.addEventListener('input', () => {
-    audio.volume = volumeSlider.value;
-  });
+audio.addEventListener('timeupdate', () => {
+  localStorage.setItem('currentTime', audio.currentTime);
+});
 
 
-  updateButton();
-</script>
+window.addEventListener('load', () => {
+  const savedTime = parseFloat(localStorage.getItem('currentTime'));
+  if (!isNaN(savedTime)) {
+    audio.currentTime = savedTime;
+  }
+});
 
-</body>
-</html>
 
+    updateButton();
+  </script>
 </body>
 </html>
